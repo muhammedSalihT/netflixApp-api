@@ -6,10 +6,10 @@
 
 
 
-// class Api {
+class Api {
   
-//    static const  url = "https://api.themoviedb.org/3";
-//    static const  apiKey = "cbf993dee362f007e50177122ed7a343";
+   static const  url = "https://api.themoviedb.org/3";
+   static const apiKey = "cbf993dee362f007e50177122ed7a343";
 
 //   Future<List<GenreModel>> getGenreList() async {
 //     final response = await http.get('$url/genre/movie/list?api_key=$apiKey');
@@ -51,4 +51,4 @@
 //       throw Exception('Failed to load Movie Information');
 //     }
 //   }
-// }
+}

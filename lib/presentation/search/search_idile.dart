@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:netflixapp/core/constants.dart';
-
-const imageUrl =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrHOsk8DLfA29H4UzuaoLxGawWrjQpwB1upw&usqp=CAU";
+import 'package:netflixapp/models/trending_movie.dart';
+import 'package:netflixapp/service/movie_service.dart';
 
 class SearchIdileWidget extends StatelessWidget {
   const SearchIdileWidget({Key? key}) : super(key: key);
@@ -18,30 +18,42 @@ class SearchIdileWidget extends StatelessWidget {
         ),
         kWidth,
         Expanded(
-          child: ListView.separated(
-              shrinkWrap: true,
-              itemBuilder: (context, index) => const TopSearchTile(),
-              separatorBuilder: (context, index) => kHeight,
-              itemCount: 10),
-        )
+            child: FutureBuilder(
+                future:
+                    MovieService.fetchMovies(endUrl: "/search/movie", lan: ""),
+                builder: (context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.hasError) {
+              return const Center(
+                  child: Text('Loading Failed',
+                      style: TextStyle(color: Colors.red)));
+            }
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+                  List movie = snapshot.data;
+                  return GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1,
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 10,
+                      ),
+                      itemBuilder: (context, index) {
+                        TrendingMovie movies = movie[index];
+                        return Container(
+                          height: 200,
+                          width: 140,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      'https://image.tmdb.org/t/p/w500${movies.backdropPath}'))),
+                        );
+                      });
+                }))
       ],
-    );
-  }
-}
-
-class TopSearchTile extends StatelessWidget {
-  const TopSearchTile({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    print(imageUrl);
-    final screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-      width: screenWidth * 0.3,
-      height: 100,
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: NetworkImage(imageUrl), fit: BoxFit.cover)),
     );
   }
 }

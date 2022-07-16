@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       bodyColor: Colors.white,
       // displayColor: Colors.pinkAccent,
     ),
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       home:  ScreenMainPage(),
     );
